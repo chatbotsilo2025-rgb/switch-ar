@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AR–Switch 3Com 24 puertos</title>
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar-js@3.3.2/aframe/build/aframe-ar.js"></script>
+</head>
+<body style="margin:0; overflow:hidden;">
+  <a-scene embedded arjs='trackingMethod: best; sourceType: webcam;'>
+    <a-marker preset="pattern" type="pattern" url="marker.patt">
+      <a-entity id="labels"></a-entity>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+  <script src="https://unpkg.com/tabletop@1.7.1/dist/tabletop.min.js"></script>
+  <script>
+    const publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ6DAEEHm3ocTEaACuWPXDpuDy47769-LKG2GvCk8u8DHNyGzapDxGiIoLJQ_uCDRFCWEQhAUp89RL6/pubhtml';
+    
+    function init() {
+      Tabletop.init({
+        key: publicSpreadsheetUrl,
+        simpleSheet: true,
+        callback: showInfo
+      });
+    }
+
+    function showInfo(data) {
+      const labels = document.getElementById('labels');
+      data.forEach(row => {
+        const puerto = parseInt(row.Puerto);
+        if (!row.IP) return;
+        const tipo = row.Tipo;
+        const ip = row.IP;
+        const ang = (puerto - 1) * (360 / 24);
+        const rad = Math.PI * ang / 180;
+        const r = 1.5;
+        const x = r * Math.cos(rad);
+        const z = r * Math.sin(rad);
+        const el = document.createElement('a-text');
+        el.setAttribute('value', `[${puerto}] ${ip} (${tipo})`);
+        el.setAttribute('position', { x, y: 0.5, z });
+        el.setAttribute('rotation', { x: -90, y: -ang, z: 0 });
+        el.setAttribute('color', '#00FF00');
+        el.setAttribute('side', 'double');
+        labels.appendChild(el);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
