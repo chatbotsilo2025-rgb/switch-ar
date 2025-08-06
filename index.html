@@ -12,11 +12,12 @@
 </head>
 <body>
   <a-scene embedded arjs="trackingMethod: best, sourceType: webcam;">
-    <!-- Cambia a marker.patt si tienes el patrón -->
-    <a-marker preset="hiro">
+    <a-marker type="pattern" url="https://chatbotsilo2025-rgb.github.io/switch-ar/marker.patt">
       <a-box position="0 0.5 0" material="color: red"></a-box>
     </a-marker>
     <a-entity camera></a-entity>
   </a-scene>
 </body>
 </html>
+
+
